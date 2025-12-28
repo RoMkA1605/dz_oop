@@ -60,7 +60,21 @@ class Reviewer(Mentor):
 
     def __str__(self):
         return f'Имя: {self.name}\nФамилия: {self.surname}'
+def average_student_grade(students, course):
+    total = grades = 0
+    for s in students:
+        if course in s.grades:
+            total += sum(s.grades[course])
+            grades += len(s.grades[course])
+    return total / grades if grades else 0
 
+def average_lecturer_grade(lecturers, course):
+    total = grades = 0
+    for l in lecturers:
+        if course in l.grades:
+            total += sum(l.grades[course])
+            grades += len(l.grades[course])
+    return total / grades if grades else 0
 # lecturer = Lecturer('Иван', 'Иванов')
 # reviewer = Reviewer('Пётр', 'Петров')
 # print(isinstance(lecturer, Mentor)) # True
@@ -83,3 +97,44 @@ class Reviewer(Mentor):
 #
 # print(lecturer.grades)  # {'Python': [7]}
 
+student1 = Student('Иван', 'Иванов', 'м')
+student1.courses_in_progress += ['Python']
+student1.finished_courses += ['Git']
+
+student2 = Student('Мария', 'Петрова', 'ж')
+student2.courses_in_progress += ['Python']
+student2.finished_courses += ['Git']
+
+lecturer1 = Lecturer('Алексей', 'Смирнов')
+lecturer1.courses_attached += ['Python']
+
+lecturer2 = Lecturer('Светлана', 'Иванова')
+lecturer2.courses_attached += ['Python']
+
+reviewer1 = Reviewer('Дмитрий', 'Орлов')
+reviewer1.courses_attached += ['Python']
+
+reviewer2 = Reviewer('Елена', 'Кузнецова')
+reviewer2.courses_attached += ['Python']
+
+reviewer1.rate_hw(student1, 'Python', 9)
+reviewer1.rate_hw(student2, 'Python', 8)
+reviewer2.rate_hw(student1, 'Python', 10)
+reviewer2.rate_hw(student2, 'Python', 7)
+
+student1.rate_lecturer(lecturer1, 'Python', 9)
+student2.rate_lecturer(lecturer1, 'Python', 8)
+student2.rate_lecturer(lecturer2, 'Python', 10)
+
+print(student1)
+print()
+print(lecturer1)
+print()
+print(reviewer1)
+print()
+
+print(f'Сравнение студентов: {student1 < student2}')
+print(f'Сравнение лекторов: {lecturer1 > lecturer2}')
+
+print(f'Средняя оценка студентов по курсу Python: {average_student_grade([student1, student2], "Python"):.2f}')
+print(f'Средняя оценка лекторов по курсу Python: {average_lecturer_grade([lecturer1, lecturer2], "Python"):.2f}')
